@@ -12,14 +12,24 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
-
+/**
+ *
+ */
 public class MaxTemperatureJob {
+    /*
+        0067011990999991950051507004+68750+023550FM-12+038299999V0203301N00671220001CN9999999N9+00001+99999999999
+        0043011990999991950051512004+68750+023550FM-12+038299999V0203201N00671220001CN9999999N9+00221+99999999999
+        0043011990999991950051518004+68750+023550FM-12+038299999V0203201N00261220001CN9999999N9-00111+99999999999
+        0043012650999991949032412004+62300+010750FM-12+048599999V0202701N00461220001CN0500001N9+01111+99999999999
+        0043012650999991949032418004+62300+010750FM-12+048599999V0202701N00461220001CN0500001N9+00781+99999999999
+    */
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
             System.err.println("Usage: MaxTemperature <input path> <output path>");
             System.exit(-1);
         }
-        Job job = new Job();
+
+        Job job = Job.getInstance();
         job.setJarByClass(MaxTemperatureJob.class);
         job.setJobName("Max temperature");
 
@@ -29,7 +39,7 @@ public class MaxTemperatureJob {
         job.setMapperClass(MaxTemperatureMapper.class);
         job.setReducerClass(MaxTemperatureReducer.class);
 
-        job.setOutputKeyClass(Text.class);              //注1
+        job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);

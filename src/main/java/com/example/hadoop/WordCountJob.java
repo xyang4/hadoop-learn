@@ -37,8 +37,8 @@ public class WordCountJob {
 
 //        FileInputFormat.setInputPaths(job, "hdfs://node1:9000/wordcount/input/");
 //        FileOutputFormat.setOutputPath(job, new Path("hdfs://node1:9000/wordcount/output/"));
-        FileInputFormat.setInputPaths(job, "D:/temp/hadoop/input");
-        FileOutputFormat.setOutputPath(job, new Path("D:/temp/hadoop/output"));
+        FileInputFormat.setInputPaths(job, "E:\\hadoop\\data\\input");
+        FileOutputFormat.setOutputPath(job, new Path("E:\\hadoop\\data\\output"));
         job.waitForCompletion(true);
     }
 }
