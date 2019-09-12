@@ -1,5 +1,7 @@
-package com.example.mp;
+package com.example.mr;
 
+import com.example.util.LocalDebugUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -9,32 +11,47 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
-import java.util.Iterator;
 
+/**
+ * 获取历史年份中每年全球气温最高记录
+ */
+@Slf4j
 public class MaxTemperatureJob {
+    //    private static final String jobName = "ncdc/micro";
+    private static final String jobName = "ncdc/all";
+
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            BasicConfigurator.configure();
-            args = new String[]{"E:\\hadoop\\doc\\hadoop-book-4e\\input\\ncdc\\sample.txt", "E:\\hadoop\\data\\maxT_2"};
-        }
+        // 1 handle params
+        args = LocalDebugUtils.initInput(args, jobName);
 
         if (args.length != 2) {
             System.err.println("Usage: MaxTemperature <input path> <output path>");
             System.exit(-1);
         }
-
+        // 2 job setting & config
         Job job = Job.getInstance();
         job.setJarByClass(MaxTemperatureJob.class);
-        job.setJobName("Max temperature");
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        job.setJobName(jobName);
+
         job.setMapperClass(MaxTemperatureMapper.class);
+        // 2.1 使用 combiner 进行优化
+        // job.setCombinerClass(MaxTemperatureReducer.class);
         job.setReducerClass(MaxTemperatureReducer.class);
+
+        //  2.2 compress 1 输入自动断定使用何种解压方式,对输出进行压缩
+
+        // FileOutputFormat.setCompressOutput(job, true);
+        // FileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+
+        // 3 input & output setting
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileInputFormat.setInputDirRecursive(job, true); // 递归目录下的所有文件
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        // 4 commit
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }
@@ -42,10 +59,8 @@ public class MaxTemperatureJob {
 class MaxTemperatureMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
     private static final int MISSING = 9999;
 
-    MaxTemperatureMapper() {
-    }
-
-    public void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, IntWritable>.Context context) throws IOException, InterruptedException {
+    @Override
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String line = value.toString();
         String year = line.substring(15, 19);
         int airTemperature;
@@ -56,7 +71,7 @@ class MaxTemperatureMapper extends Mapper<LongWritable, Text, Text, IntWritable>
         }
 
         String quality = line.substring(92, 93);
-        if (airTemperature != 9999 && quality.matches("[01459]")) {
+        if (airTemperature != MISSING && quality.matches("[01459]")) {
             context.write(new Text(year), new IntWritable(airTemperature));
         }
 
@@ -64,17 +79,13 @@ class MaxTemperatureMapper extends Mapper<LongWritable, Text, Text, IntWritable>
 }
 
 class MaxTemperatureReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-    MaxTemperatureReducer() {
-    }
+    @Override
+    public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 
-    public void reduce(Text key, Iterable<IntWritable> values, Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
-        int maxValue = -2147483648;
-
-        IntWritable value;
-        for (Iterator var5 = values.iterator(); var5.hasNext(); maxValue = Math.max(maxValue, value.get())) {
-            value = (IntWritable) var5.next();
+        int maxValue = Integer.MIN_VALUE;
+        for (IntWritable value : values) {
+            maxValue = Math.max(maxValue, value.get());
         }
-
         context.write(key, new IntWritable(maxValue));
     }
 }

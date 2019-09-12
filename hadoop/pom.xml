@@ -16,6 +16,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <apache.hadoop.version>2.9.2</apache.hadoop.version>
+        <mrunit.version>1.1.0</mrunit.version>
     </properties>
 
     <dependencies>
@@ -39,6 +40,8 @@
             <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
             <version>${apache.hadoop.version}</version>
         </dependency>
+
+
         <!-- common -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -51,6 +54,18 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.mrunit</groupId>
+            <artifactId>mrunit</artifactId>
+            <version>${mrunit.version}</version>
+            <classifier>hadoop2</classifier>
+            <scope>test</scope>
+        </dependency>
+        <!-- for test-->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
         </dependency>
     </dependencies>
 

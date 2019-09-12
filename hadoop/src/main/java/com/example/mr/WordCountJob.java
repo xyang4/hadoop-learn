@@ -1,5 +1,6 @@
-package com.example.mp;
+package com.example.mr;
 
+import com.example.util.LocalDebugUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -10,25 +11,22 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 import java.util.Iterator;
 
 public class WordCountJob {
+    private static String jobName = "wc";
+
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        if (args.length == 0) {
-            BasicConfigurator.configure();
-            args = new String[]{"data/input", "data/output/wc"};
-        }
+        args = LocalDebugUtils.initInput(args, jobName);
 
         if (args.length != 2) {
             System.err.println("Usage: MaxTemperature <input path> <output path>");
             System.exit(-1);
         }
-
         Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf, "wc");
+        Job job = Job.getInstance(conf, jobName);
         job.setJarByClass(WordCountJob.class);
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountReducer.class);
@@ -44,9 +42,7 @@ public class WordCountJob {
 class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
     private Text text = new Text();
 
-    WordCountMapper() {
-    }
-
+    @Override
     protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, IntWritable>.Context context) throws IOException, InterruptedException {
         String line = value.toString();
         String[] words = line.split(" ");
@@ -63,9 +59,7 @@ class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 }
 
 class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-    WordCountReducer() {
-    }
-
+    @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
         int count = 0;
 
@@ -73,7 +67,6 @@ class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
         for (Iterator var5 = values.iterator(); var5.hasNext(); count += item.get()) {
             item = (IntWritable) var5.next();
         }
-
         context.write(key, new IntWritable(count));
     }
 }
