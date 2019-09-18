@@ -1,7 +1,14 @@
 # hadoop-learn
 > hadoop相关
 
-**案例**
-- wordcount
+### 案例
+**wordcount**
 
-- HDFS `java api 操作HDFS`
+**HDFS**
+---
+### MapReduce 
+- MapReduce 特性
+    - 计数器   √
+    - 排序 
+    - 连接
+    - 分区
