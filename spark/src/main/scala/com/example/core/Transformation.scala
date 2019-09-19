@@ -5,6 +5,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{Partitioner, SparkConf, SparkContext}
 
 /**
+  * 算子： transformation
   * RDD的转换操作，分三种：单value，双value交互，（k,v）对
   */
 
