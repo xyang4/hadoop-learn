@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    参考资料：
+        https://www.jianshu.com/p/04065d8cb2a9
+-->
+<configuration debug="false" scan="true" scanPeriod="1 seconds">
+    <contextName>logback</contextName>
+    <!--定义参数,后面可以通过${app.name}使用-->
+    <property name="log.path" value="E:\\hadoop\\code\\hadoop-learn\\logback\\logs/"/>
+    <property name="app.name" value="logback_test"/>
+    <property name="log.pattern" value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{100} [%file:%line] - %msg%n"/>
+    <property name="log.pattern.console" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) [%t] %replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''} - %highlight(%m%n)"/>
+    <property name="log.pattern.console_color" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) [%t] %cyan(%replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''}) - %highlight(%m%n)"/>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- encoder 默认配置为 PatternLayoutEncoder -->
+        <encoder>
+            <pattern>${log.pattern.console}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="info_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--定义日志输出的路径-->
+        <!--这里的scheduler.manager.server.home 没有在上面的配置中设定，所以会使用java启动时配置的值-->
+        <!--比如通过 java -Dscheduler.manager.server.home=/path/to XXXX 配置该属性-->
+        <file>${log.path}/info/${app.name}.log</file>
+        <!--定义日志滚动的策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义文件滚动时的文件名的格式-->
+            <fileNamePattern>${log.path}/info/${app.name}.%d{yyyy-MM-dd.HH}.log.gz
+            </fileNamePattern>
+            <!--60天的时间周期，日志量最大20GB-->
+            <maxHistory>60</maxHistory>
+            <!-- 该属性在 1.1.6版本后 才开始支持-->
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <!--每个日志文件最大100MB-->
+            <maxFileSize>100MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="error_file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/error/${app.name}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/error/${app.name}.%d{yyyy-MM-dd.HH}.log.gz
+            </fileNamePattern>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>100MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <!--
+            <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+                <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+                    <expression>
+                        if(level > WARN) return true;
+                        return false;
+                    </expression>
+                </evaluator>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        -->
+    </appender>
+
+    <!-- root 是默认的logger 这里设定输出级别是trace -->
+    <root level="trace">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="info_file"/>
+        <appender-ref ref="error_file"/>
+    </root>
+
+    <!--对于类路径以 com.example.logback 开头的Logger,输出级别设置为 trace,并且只输出到控制台-->
+    <!--这个logger没有指定appender，它会继承root节点中定义的那些appender-->
+    <logger name="com.example.logback" level="trace"/>
+    <!--
+        1 通过 LoggerFactory.getLogger("orderLogger") 可以获取到这个logger
+        2 由于该 logger 自动继承 root 的 appender，默认按root的配置的 appender 处理
+        3 additivity 表示是否使用 rootLogger 配置的 appender 进行输出，若不配置为 false ,就会导致一条日志在控制台输出两次
+     -->
+    <logger name="orderLogger" level="info" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+
+    <!--由于设置了additivity="false"输出时不会使用 rootLogger 的 appender ,但该 logger 未配置 appender，所以使用这个 logger 不会把日志输出到任何地方-->
+    <logger name="invalidLogger" level="info" additivity="false"/>
+</configuration>

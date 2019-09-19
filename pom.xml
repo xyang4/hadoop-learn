@@ -10,6 +10,7 @@
     <modules>
         <module>hadoop</module>
         <module>spark</module>
+        <module>logback</module>
     </modules>
     <packaging>pom</packaging>
     <!-- FIXME change it to the project's website -->

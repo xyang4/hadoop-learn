@@ -18,3 +18,5 @@
 # out
 **/out/
 */logs/
+
+data/output
