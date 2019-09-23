@@ -17,3 +17,8 @@
     - 分区
 ## Spark
 > dosomething
+
+## 分支规划
+- master 合并使用
+- home  环境：mac
+- work 环境：window
