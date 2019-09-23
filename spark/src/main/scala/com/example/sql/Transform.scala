@@ -31,6 +31,7 @@ object Transform {
     /** **************RDD -> DataFrame ***********************/
 
     // 引入隐式转换操作
+    // For implicit conversions like converting RDDs to DataFrames
     import spark.implicits._
 
     // 当前rdd没结构，所以toDF()需要传参数
