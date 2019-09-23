@@ -1,10 +1,10 @@
-package com.example.core
+package com.example.spark.core
 
 ;
 
 import java.sql.DriverManager
 
-import com.example.CommonConfig
+import com.example.spark.CommonConfig
 import org.apache.spark.rdd.JdbcRDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -15,7 +15,7 @@ object Mysql extends CommonConfig {
 
   def main(args: Array[String]): Unit = {
 
-    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("Mysql")
+    val sparkConf = new SparkConf().setMaster(SPARK_MASTER).setAppName("Mysql")
     val sc = new SparkContext(sparkConf)
 
     val driver = "com.mysql.cj.jdbc.Driver"

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spark-demo</artifactId>
+    <artifactId>spark</artifactId>
     <!-- 属性配置 -->
     <properties>
         <spark.version>2.4.4</spark.version>
@@ -46,19 +46,30 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!-- 编译scala的插件 -->
                 <plugin>
-                    <groupId>net.alchim31.maven</groupId>
-                    <artifactId>scala-maven-plugin</artifactId>
-                    <version>3.2.2</version>
-                    <!--<executions>
+                    <!-- 编译scala的插件 -->
+                    <groupId>org.scala-tools</groupId>
+                    <artifactId>maven-scala-plugin</artifactId>
+                    <version>2.15.2</version>
+                    <executions>
                         <execution>
+                            <id>scala-compile</id>
                             <goals>
                                 <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <includes>
+                                    <include>**/*.scala</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>scala-test-compile</id>
+                            <goals>
                                 <goal>testCompile</goal>
                             </goals>
                         </execution>
-                    </executions>-->
+                    </executions>
                 </plugin>
                 <!-- 编译java的插件 -->
                 <plugin>

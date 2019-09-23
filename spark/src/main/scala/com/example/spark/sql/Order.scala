@@ -1,6 +1,6 @@
-package com.example.sql
+package com.example.spark.sql
 
-import com.example.CommonConfig
+import com.example.spark.CommonConfig
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{Dataset, SparkSession}

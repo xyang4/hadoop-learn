@@ -1,6 +1,6 @@
-package com.example.core
+package com.example.spark.core
 
-import com.example.CommonConfig
+import com.example.spark.CommonConfig
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -9,9 +9,10 @@ import org.apache.spark.{SparkConf, SparkContext}
   * e.g： 1516609143867 6 7 64 16
   */
 object Agent extends CommonConfig {
+
   def main(args: Array[String]): Unit = {
 
-    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("Agent").setSparkHome(SPARK_HOME)
+    val sparkConf = new SparkConf().setMaster(SPARK_MASTER).setAppName("Agent").setSparkHome(SPARK_HOME)
     val sc = new SparkContext(sparkConf)
 
     val line = sc.textFile(INPUT_BASE_DIR + "agent")
@@ -35,6 +36,7 @@ object Agent extends CommonConfig {
     val provinceAdTop3 = provinceGroup.mapValues { x =>
       x.toList.sortWith((x, y) => x._2 > y._2).take(3)
     }
+
     provinceAdTop3.saveAsTextFile(OUTPUT_BASE_DIR + "pAdTop3")
     // provinceAdTop3.collect().foreach(println)
 
