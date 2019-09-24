@@ -1,4 +1,4 @@
-package com.example.sql
+package com.example.spark.sql
 
 
 import org.apache.spark.SparkConf

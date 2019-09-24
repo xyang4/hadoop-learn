@@ -1,16 +1,15 @@
-package com.example
+package com.example.spark
 
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
 
-object SimpleAppWithScala {
+object SimpleAppWithScala extends CommonConfig {
   /**
     * Hello World
     *
     * @param args
     */
   def main(args: Array[String]) {
-    val SPARK_HOME = "E:\\hadoop\\tools\\spark-2.4.4-bin-hadoop2.7"
 
     val logFile = SPARK_HOME + "/README.md" // Should be some file on your system
     val spark = SparkSession.builder.appName("Simple Application").config("spark.master", "local").getOrCreate()
@@ -33,7 +32,12 @@ object WordCount extends CommonConfig {
     val sparkConfig: SparkConf = new SparkConf().setMaster(SPARK_MASTER).setAppName("WordCount")
     val sc: SparkContext = SparkContext.getOrCreate(sparkConfig)
 
-    sc.textFile(INPUT_BASE_DIR + "word/wordCount.txt").flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _).collect().foreach(println)
+    sc.textFile(INPUT_BASE_DIR + "word/wordCount.txt")
+      .flatMap(_.split(" "))
+      .map((_, 1))
+      .reduceByKey(_ + _)
+      .collect()
+      .foreach(println)
 
     sc.stop()
   }

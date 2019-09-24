@@ -12,11 +12,8 @@
 .DS_Store
 
 # Maven
-**/log/
+**/logs/
 **/target/
 
 # out
-**/out/
-*/logs/
-
-data/output
+#*/output/

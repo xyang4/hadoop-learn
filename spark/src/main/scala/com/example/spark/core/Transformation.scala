@@ -1,12 +1,13 @@
-package com.example.core
+package com.example.spark.core
 
-import com.example.CommonConfig
+import com.example.spark.CommonConfig
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{Partitioner, SparkConf, SparkContext}
 
 /**
   * 算子： transformation
   * RDD的转换操作，分三种：单value，双value交互，（k,v）对
+  *   rdd.partitions.size 查看分区数量
   */
 
 object Transformation extends CommonConfig {
@@ -90,20 +91,19 @@ object Transformation extends CommonConfig {
 
     /**
       * distinct()
-      * 去重，且去重后会shuffler，可以指定去重后的分区数
+      * 去重，且去重后会shuffler，可指定去重后的分区数
       */
 
-    //    val distinctRDD: RDD[Int] = listRDD.distinct()
-    //    distinctRDD.collect().foreach(println)
+    listRDD.distinct().saveAsTextFile(OUTPUT_BASE_DIR + "distinct")
 
     /**
       * coalesce(n)
       * 缩减分区的数量，可以简单的理解为合并分区，默认，没有shuffler，可以加参数true指定shuffler
       */
 
-    //    println("缩减分区前 = " + listRDD.partitions.size)
-    //    val coalesceRDD: RDD[Int] = listRDD.coalesce(2)
-    //    println("缩减分区前 = " + coalesceRDD.partitions.size)
+    println("缩减分区前 = " + listRDD.partitions.size)
+    val coalesceRDD: RDD[Int] = listRDD.coalesce(2)
+    println("缩减分区前 = " + coalesceRDD.partitions.size)
 
     /**
       * repartition()
@@ -154,22 +154,21 @@ object Transformation extends CommonConfig {
       * partitionBy(partitioner: Partitioner)
       * 按照分区器进行分区
       */
-
-    //    pairRDD1.partitionBy(new org.apache.spark.HashPartitioner(2))
-    //      .glom().collect().foreach(arrays => {
+    // 1 使用 HashPartitioner 分区器
+    //    pairRDD1.partitionBy(new org.apache.spark.HashPartitioner(2)).glom().collect().foreach(arrays => {
     //      println(arrays.mkString(","))
     //    })
-
-    //    pairRDD1.partitionBy(new MyPartitioner(3))
-    //      .glom().collect().foreach(arrays => {
-    //      println(arrays.mkString(","))
-    //    })
+    // 2 使用自定义分区器，继承自 Partitioner
+    pairRDD1.partitionBy(new MyPartitioner(3)).glom().collect().foreach(arrays => {
+      println(arrays.mkString(","))
+    })
 
     /**
       * groupByKey()
       * 单纯把key相等的value放在一起，生成序列
+      * sc.parallelize(Array("o","t","th","f","th","f","o")).map((_,1)).groupByKey.map(t=>(t._1,t._2.sum)).collect
       */
-    //    pairRDD1.groupByKey().collect().foreach(println)
+    pairRDD1.groupByKey().collect().foreach(println)
 
 
     /**
@@ -177,10 +176,9 @@ object Transformation extends CommonConfig {
       * 按key聚合，并且按函数对key相等的value进行操作
       */
 
-    //    pairRDD1.reduceByKey(_ + _)
-    //      .glom().collect().foreach(arrays => {
-    //      println(arrays.mkString(","))
-    //    })
+    pairRDD1.reduceByKey(_ + _).glom().collect().foreach(arrays => {
+      println(arrays.mkString(","))
+    })
 
 
     /**
@@ -189,13 +187,10 @@ object Transformation extends CommonConfig {
       * seqOp：每个分区里的聚合函数
       * seqOp：分区间的聚合函数
       */
-
-
     // 取出每个分区相同对key的最大值，在相加
-    //    pairRDD2.aggregateByKey(0)(math.max(_,_), _+_)
-    //      .glom().collect().foreach(arrays => {
-    //      println(arrays.mkString(","))
-    //    })
+    pairRDD2.aggregateByKey(0)(math.max(_, _), _ + _).glom().collect().foreach(arrays => {
+      println(arrays.mkString(","))
+    })
 
     /**
       * foldByKey(zeroValue: V)(func: (V, V) => V)
@@ -257,7 +252,7 @@ object Transformation extends CommonConfig {
       * （k, v1） 和 （k, v2）cogroup 后，得到（k, v1集合，v2集合）
       */
 
-    pairRDD1.cogroup(pairRDD3).collect().foreach(println)
+    //    pairRDD1.cogroup(pairRDD3).collect().foreach(println)
 
     sc.stop()
 
@@ -273,6 +268,12 @@ class MyPartitioner(partitions: Int) extends Partitioner {
     partitions
   }
 
+  /**
+    * 默认放到 1 分区
+    *
+    * @param key
+    * @return
+    */
   override def getPartition(key: Any): Int = {
     1
   }

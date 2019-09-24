@@ -1,6 +1,6 @@
-package com.example.core
+package com.example.spark.core
 
-import com.example.CommonConfig
+import com.example.spark.CommonConfig
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
