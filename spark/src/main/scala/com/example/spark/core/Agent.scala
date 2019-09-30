@@ -1,6 +1,6 @@
 package com.example.spark.core
 
-import com.example.spark.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -12,7 +12,7 @@ object Agent extends CommonConfig {
 
   def main(args: Array[String]): Unit = {
 
-    val sparkConf = new SparkConf().setMaster(SPARK_MASTER).setAppName("Agent").setSparkHome(SPARK_HOME)
+    val sparkConf = new SparkConf().setMaster(SPARK_MASTER).setAppName("Agent").setSparkHome(getSparkHome())
     val sc = new SparkContext(sparkConf)
 
     val line = sc.textFile(INPUT_BASE_DIR + "agent")

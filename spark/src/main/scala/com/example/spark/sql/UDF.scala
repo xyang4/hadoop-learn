@@ -1,6 +1,6 @@
 package com.example.spark.sql
 
-import com.example.spark.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.SparkConf
 import org.apache.spark.sql._
 import org.apache.spark.sql.expressions.{Aggregator, MutableAggregationBuffer, UserDefinedAggregateFunction}

@@ -4,7 +4,7 @@ package com.example.spark.core
 
 import java.sql.DriverManager
 
-import com.example.spark.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.rdd.JdbcRDD
 import org.apache.spark.{SparkConf, SparkContext}
 

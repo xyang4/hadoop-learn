@@ -24,19 +24,41 @@ class Location(xp: Int, yp: Int, zp: Int) extends Point(xc = 0, yc = 0) {
   }
 }
 
-
-class Person {
-  var name = ""
-
-  override def toString = getClass.getName + "[name=" + name + "]"
+class Person(var name: String) {
+  override def toString = getClass.getName + "[name=" + name + "]."
 }
 
-class Employee extends Person {
+/**
+  * Scala 允许一个类有多个辅助构造器，但只能有一个主构造器，并且辅助构造器内部第一行必须调用主构造器，这里是可以通过多个辅助构造器间接地调用主构造器。
+  *
+  * @param name
+  * @param age
+  */
+class Man(name: String, var age: Int) extends Person(name) {
+  private var country: String = _
+
+  def this(name: String, age: Int, country: String) {
+    this(name, age)
+    this.country = country
+  }
+
+  override def toString: String = super.toString + greet
+
+  def greet(): Unit = {
+    //    var str = String.format("Hi ,I am %s,age is %04d,come from %s.", name, age, country)
+    var str = "Hi ,I am " + name + ",age is " + age + ",come from " + country
+    println(str)
+  }
+}
+
+
+class Employee(name: String) extends Person(name) {
   var salary = 0.0
 
   override def toString: String = super.toString + "[salary=" + salary + "]"
 }
 
+// 修饰符测试
 class Marker private(color: String) {
   println("create:" + this)
 
@@ -65,6 +87,9 @@ object Marker {
   }
 }
 
+class User
+
+
 object Test {
   def main(args: Array[String]): Unit = {
 
@@ -75,8 +100,10 @@ object Test {
 }
 
 object T extends App {
-  val fred = new Employee
-  fred.name = "Fred"
+  val fred = new Employee("Fred")
   fred.salary = 50000
   println(fred)
+
+  new Man("zs", 20).greet()
+  new Man("zs", 20, "sx").greet()
 }

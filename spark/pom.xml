@@ -9,13 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spark</artifactId>
+    <artifactId>spark-demo</artifactId>
     <!-- 属性配置 -->
     <properties>
         <spark.version>2.4.4</spark.version>
         <scala.version>2.12</scala.version>
         <java.version>1.8</java.version>
+
         <mysql-connector-java.version>6.0.6</mysql-connector-java.version>
+
+        <!-- 编译插件配置 -->
+        <scala.maven.version>3.2.2</scala.maven.version>
+        <maven.compiler.version>3.5.1</maven.compiler.version>
     </properties>
     <!-- 相关依赖 -->
     <dependencies>
@@ -46,15 +51,17 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!-- 编译scala的插件 -->
                 <plugin>
-                    <!-- 编译scala的插件 -->
-                    <groupId>org.scala-tools</groupId>
-                    <artifactId>maven-scala-plugin</artifactId>
-                    <version>2.15.2</version>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>scala-maven-plugin</artifactId>
+                    <version>${scala.maven.version}</version>
                     <executions>
                         <execution>
                             <id>scala-compile</id>
+                            <phase>compile</phase>
                             <goals>
+                                <goal>add-source</goal>
                                 <goal>compile</goal>
                             </goals>
                             <configuration>
@@ -65,17 +72,31 @@
                         </execution>
                         <execution>
                             <id>scala-test-compile</id>
+                            <phase>test-compile</phase>
                             <goals>
+                                <goal>add-source</goal>
                                 <goal>testCompile</goal>
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <recompileMode>spark</recompileMode>
+                        <compileOrder>Mixed</compileOrder>
+                        <scalaVersion>${scala.version}</scalaVersion>
+                        <args>
+                            <arg>-deprecation</arg>
+                        </args>
+                        <jvmArgs>
+                            <jvmArg>-Xms64m</jvmArg>
+                            <jvmArg>-Xmx1024m</jvmArg>
+                        </jvmArgs>
+                    </configuration>
                 </plugin>
                 <!-- 编译java的插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>${maven.compiler.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.spark.common.CommonConfig;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 
@@ -8,10 +9,9 @@ import org.apache.spark.sql.SparkSession;
  * @date 2019/9/17 0017 15:43
  * @purchase //TODO 一句话说明
  */
-public class SimpleApp {
+public class SimpleApp extends CommonConfig {
     public static void main(String[] args) {
-        String spark_home = "/usr/local/spark";
-        String logFile = spark_home + "/README.md"; // Should be some file on your system
+        String logFile = CommonConfig.config().getSparkHome() + "/README.md"; // Should be some file on your system
         SparkSession spark = SparkSession.builder().appName("Simple Application").master("local").getOrCreate();
         Dataset<String> logData = spark.read().textFile(logFile).cache();
         long numAs = logData.collectAsList().stream().filter(v -> v.contains("a")).count();

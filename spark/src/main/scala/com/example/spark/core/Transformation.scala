@@ -1,6 +1,6 @@
 package com.example.spark.core
 
-import com.example.spark.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{Partitioner, SparkConf, SparkContext}
 
