@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <name>hadoop</name>
     <artifactId>hadoop-demo</artifactId>
 
     <properties>
@@ -73,7 +73,6 @@
 
     <build>
         <pluginManagement>
-
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -88,5 +87,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
 </project>

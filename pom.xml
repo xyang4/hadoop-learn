@@ -7,10 +7,10 @@
     <artifactId>hadoop-learn</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>大数据各个组件练习</description>
+    <packaging>pom</packaging>
     <modules>
         <module>hadoop</module>
         <module>spark</module>
         <module>logback</module>
     </modules>
-    <packaging>pom</packaging>
 </project>
