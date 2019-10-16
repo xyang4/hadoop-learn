@@ -1,5 +1,6 @@
-package com.example.spark.spark.sql
+package com.example.spark.sql
 
+import com.example.spark.common.CommonConfig
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
@@ -10,12 +11,11 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
   * 1 RDD -> DataFrame : 加结构信息(列名，类型)
   * 2 DateFrame -> DataSet: 加类属性，也就是让RDD里存的是一个个对象
   */
-
-object Transform {
+object Transform extends CommonConfig {
 
   def main(args: Array[String]): Unit = {
 
-    val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("Transform")
+    val sparkConf: SparkConf = new SparkConf().setMaster(SPARK_MASTER).setAppName("Transform")
 
     // 创建SparkSession
     val spark: SparkSession = SparkSession.builder.config(sparkConf).getOrCreate()
@@ -38,12 +38,8 @@ object Transform {
 
     /** **************DataFrame -> DataSet *********************/
 
-    // 先要有样例类
-    val ds: Dataset[User] = df.as[User]
-
     /** **************DataSet -> DataFrame *********************/
-
-    val df1: DataFrame = ds.toDF()
+    val df1: DataFrame = df.as[User].toDF()
 
     /** ************** DataFrame -> RDD *************************/
 

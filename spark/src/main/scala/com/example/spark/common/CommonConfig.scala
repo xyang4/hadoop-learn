@@ -1,6 +1,6 @@
-package com.example.spark.spark.common
+package com.example.spark.common
 
-import com.example.spark.spark.common.CommonConfig.config
+import com.example.spark.common.CommonConfig.config
 
 class CommonConfig {
   val SPARK_HOME_LINUX = "/usr/local/spark"

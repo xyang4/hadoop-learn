@@ -1,6 +1,6 @@
-package com.example.spark.spark
+package com.example.spark
 
-import com.example.spark.spark.common.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
 

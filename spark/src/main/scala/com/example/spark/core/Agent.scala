@@ -1,6 +1,6 @@
-package com.example.spark.spark.core
+package com.example.spark.core
 
-import com.example.spark.spark.common.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**

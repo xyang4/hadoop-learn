@@ -1,4 +1,4 @@
-package com.example.spark.spark.core
+package com.example.spark.core
 
 import java.util
 

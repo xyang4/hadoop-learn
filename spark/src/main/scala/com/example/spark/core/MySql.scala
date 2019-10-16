@@ -1,10 +1,10 @@
-package com.example.spark.spark.core
+package com.example.spark.core
 
 ;
 
 import java.sql.DriverManager
 
-import com.example.spark.spark.common.CommonConfig
+import com.example.spark.common.CommonConfig
 import org.apache.spark.rdd.JdbcRDD
 import org.apache.spark.{SparkConf, SparkContext}
 
