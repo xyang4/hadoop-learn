@@ -65,8 +65,8 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <!-- 编译scala的插件 -->
+              <!--  <plugin>
+                    &lt;!&ndash; 编译scala的插件 &ndash;&gt;
                     <groupId>org.scala-tools</groupId>
                     <artifactId>maven-scala-plugin</artifactId>
                     <version>2.15.2</version>
@@ -90,9 +90,9 @@
                         </execution>
                     </executions>
                 </plugin>
-
+-->
                 <!-- 编译scala的插件 -->
-                <!--<plugin>
+                <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
                     <version>${scala.maven.version}</version>
@@ -131,7 +131,7 @@
                             <jvmArg>-Xmx1024m</jvmArg>
                         </jvmArgs>
                     </configuration>
-                </plugin>-->
+                </plugin>
                 <!-- 编译java的插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

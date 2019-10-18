@@ -32,6 +32,6 @@ object Trait extends App {
 }
 
 object EnvTest extends App {
-//  println(System.getenv())
+  //  println(System.getenv())
   println(System.getProperty("os.name").toLowerCase().contains("window"))
 }

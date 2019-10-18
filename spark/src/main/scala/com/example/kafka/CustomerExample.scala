@@ -4,18 +4,12 @@ import java.time.Duration
 import java.util.{Collections, Properties}
 
 import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import org.joda.time.LocalDate
-
-
-
-
 
 
 /**
   * 消费者
   */
-object ScalaComsumerExample extends App {
+object ComsumerExample extends App {
 
   val props = new Properties()
   props.put("bootstrap.servers", KafkaConfig.BROKERS)

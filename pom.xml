@@ -8,9 +8,20 @@
     <version>0.0.1-SNAPSHOT</version>
     <description>大数据各个组件练习</description>
     <packaging>pom</packaging>
+    
     <modules>
         <module>hadoop</module>
         <module>spark</module>
         <module>logback</module>
+        <module>hbase</module>
+        <module>flink</module>
+        <module>kafka</module>
+        <module>hive</module>
+        <module>zk</module>
     </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
 </project>

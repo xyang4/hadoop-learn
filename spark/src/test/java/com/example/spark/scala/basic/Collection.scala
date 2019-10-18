@@ -14,7 +14,7 @@ object Collection {
     // 创建两个不同类型元素的元组
     val tuple = (10, "Runoob")
 
-    // 定义 Option
+    // 定义 Option : Option[T] 表示有可能包含值的容器，也可能不包含值。
     val option: Option[Int] = Some(5)
   }
 

@@ -8,9 +8,12 @@
     <!--定义参数,后面可以通过${app.name}使用-->
     <property name="log.path" value="E:\\hadoop\\code\\hadoop-learn\\logback\\logs/"/>
     <property name="app.name" value="logback_test"/>
-    <property name="log.pattern" value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{100} [%file:%line] - %msg%n"/>
-    <property name="log.pattern.console" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) [%t] %replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''} - %highlight(%m%n)"/>
-    <property name="log.pattern.console_color" value="%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) [%t] %cyan(%replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''}) - %highlight(%m%n)"/>
+    <property name="log.pattern"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{100} [%file:%line] - %msg%n"/>
+    <property name="log.pattern.console"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) [%t] %replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''} - %highlight(%m%n)"/>
+    <property name="log.pattern.console_color"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) [%t] %cyan(%replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''}) - %highlight(%m%n)"/>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

@@ -8,7 +8,7 @@ import org.joda.time.LocalDate
 /**
   * 生产者
   */
-object Producer extends App {
+object ProducerExample extends App {
 
   val props = new Properties()
   props.put("bootstrap.servers", KafkaConfig.BROKERS)

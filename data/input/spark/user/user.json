@@ -1,3 +1,12 @@
-{"name":"zs", "age":20}
-{"name":"ls", "age":21}
-{"name":"ww", "age":22}
+{
+  "name": "zs",
+  "age": 20
+}
+{
+  "name": "ls",
+  "age": 21
+}
+{
+  "name": "ww",
+  "age": 22
+}
